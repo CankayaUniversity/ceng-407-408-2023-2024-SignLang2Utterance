@@ -19,6 +19,14 @@ cap = cv2.VideoCapture(0)
 if not cap.isOpened():  
     print("Kamera başlatılamadı!")
     exit()
+    
+# Define the size of the frame
+frame_width = 1280
+frame_height = 720
+
+# Set the capture resolution
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
 
 labels_dict = {
     0: 'A',
@@ -55,13 +63,42 @@ start_time = time.time()  # Start time for the 2-second window
 
 engine = pyttsx3.init()
 
+def speak_sentence(text):
+    engine.say(text)
+    engine.runAndWait()
+
+def draw_buttons(frame):
+    # Draw background rectangle
+    cv2.rectangle(frame, (0, frame_height - 150), (frame_width, frame_height), (255, 255, 255), -1)
+
+    # Draw sentence
+    cv2.putText(frame, "Sentence: " + sentence, (10, frame_height - 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+    cv2.rectangle(frame, (20, frame_height - 100), (120, frame_height - 20), (200, 200, 200), -1)
+    cv2.putText(frame, "Space", (35, frame_height - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+    cv2.putText(frame, "(Space)", (25, frame_height - 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+
+    # Draw delete button
+    cv2.rectangle(frame, (150, frame_height - 100), (250, frame_height - 20), (200, 200, 200), -1)
+    cv2.putText(frame, "Delete", (165, frame_height - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+    cv2.putText(frame, "(Backspace)", (155, frame_height - 40), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1)
+
+    # Draw speak button
+    cv2.rectangle(frame, (280, frame_height - 100), (380, frame_height - 20), (200, 200, 200), -1)
+    cv2.putText(frame, "Speak", (295, frame_height - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+    cv2.putText(frame, "(S)", (310, frame_height - 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+
+    return frame
+
 while True:
     ret, frame = cap.read()  
     if not ret:
         print("Kare okunamadı!")
         break
 
-    H, W, _ = frame.shape  
+    H, W, _ = frame.shape
+    
+    frame = draw_buttons(frame)
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -131,8 +168,8 @@ while True:
             most_predicted_letter = ""
         start_time = time.time()
 
-    cv2.putText(frame, "Sentence: " + sentence, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    cv2.putText(frame, "Press 's' to Speak", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+    #cv2.putText(frame, "Sentence: " + sentence, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    #cv2.putText(frame, "Press 's' to Speak", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
     
     key = cv2.waitKey(1) & 0xFF
     cv2.imshow('frame', frame)
