@@ -16,8 +16,8 @@ if len(data) == 0:
     exit()
 
 #Train ve test'e ayırma
-data_padded = pad_sequences(data, padding='post', dtype='float32')     #Sequence to array hatası verirse bu kısım hatayı çözebilir
-x_train, x_test, y_train, y_test = train_test_split(data_padded, labels, test_size=0.2, shuffle=True, stratify=labels)  #Sequence to array hatası verirse bu kısım hatayı çözebilir
+data_padded = pad_sequences(data, padding='post', dtype='float32')     
+x_train, x_test, y_train, y_test = train_test_split(data_padded, labels, test_size=0.2, shuffle=True, stratify=labels)  
 
 # Model oluşturma ve eğitme
 model = RandomForestClassifier()
