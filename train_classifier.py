@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # Veri yükleme
 data_dict = pickle.load(open('./data.pickle', 'rb'))
@@ -13,12 +14,10 @@ labels = np.asarray(data_dict['labels'])
 if len(data) == 0:
     print("Veri seti boş!")
     exit()
-    
-#data_padded = pad_sequences(data, padding='post', dtype='float32')     #Sequence to array hatası verirse bu kısım hatayı çözebilir
-#x_train, x_test, y_train, y_test = train_test_split(data_padded, labels, test_size=0.2, shuffle=True, stratify=labels)  #Sequence to array hatası verirse bu kısım hatayı çözebilir
 
-# Veri setini eğitim ve test setlerine bölme
-x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
+#Train ve test'e ayırma
+data_padded = pad_sequences(data, padding='post', dtype='float32')     #Sequence to array hatası verirse bu kısım hatayı çözebilir
+x_train, x_test, y_train, y_test = train_test_split(data_padded, labels, test_size=0.2, shuffle=True, stratify=labels)  #Sequence to array hatası verirse bu kısım hatayı çözebilir
 
 # Model oluşturma ve eğitme
 model = RandomForestClassifier()
