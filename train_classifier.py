@@ -13,6 +13,9 @@ labels = np.asarray(data_dict['labels'])
 if len(data) == 0:
     print("Veri seti boş!")
     exit()
+    
+#data_padded = pad_sequences(data, padding='post', dtype='float32')     #Sequence to array hatası verirse bu kısım hatayı çözebilir
+#x_train, x_test, y_train, y_test = train_test_split(data_padded, labels, test_size=0.2, shuffle=True, stratify=labels)  #Sequence to array hatası verirse bu kısım hatayı çözebilir
 
 # Veri setini eğitim ve test setlerine bölme
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
